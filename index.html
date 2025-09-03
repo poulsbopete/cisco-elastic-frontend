@@ -457,7 +457,7 @@
     </main>
 
     <script>
-        // Real Elastic API integration via Heroku backend
+        // Real Elastic API integration via Elastic Serverless
         class ElasticChatAPI {
             constructor() {
                 this.elasticHost = 'https://ai-assistants-ffcafb.kb.us-east-1.aws.elastic.cloud';
@@ -744,10 +744,10 @@
                 const isConnected = await elasticAPI.testConnection();
                 
                 if (isConnected) {
-                    statusElement.innerHTML = '<span>✅ Connected to Cisco AI Assistant</span>';
+                    statusElement.innerHTML = '<span>✅ Connected to Elastic Serverless AI Assistant</span>';
                     statusElement.className = 'connection-status success';
                 } else {
-                    statusElement.innerHTML = '<span>⚡ Connecting to AWS Lambda backend...</span>';
+                    statusElement.innerHTML = '<span>⚡ Connecting to Elastic Serverless...</span>';
                     statusElement.className = 'connection-status warning';
                     
                     // Retry connection after a delay
