@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cisco - Intelligent Search</title>
+    <title>Cisco - Intelligent Search Demo</title>
     <style>
         * {
             margin: 0;
@@ -15,6 +15,14 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
+        }
+
+        .demo-banner {
+            background: linear-gradient(135deg, #00bceb, #0099c7);
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
         }
 
         .header {
@@ -80,7 +88,16 @@
         .hero-subtitle {
             font-size: 1.2rem;
             color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .demo-description {
+            font-size: 1rem;
+            color: #888;
             margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .search-container {
@@ -124,6 +141,63 @@
         .search-btn:hover {
             background: linear-gradient(135deg, #0099c7, #007ba3);
             transform: translateY(-50%) scale(1.05);
+        }
+
+        .suggestions-container {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-top: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+
+        .suggestions-container.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .suggestion-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .suggestion-item:hover {
+            background: #f8f9fa;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .suggestion-item:first-child {
+            border-radius: 20px 20px 0 0;
+        }
+
+        .suggestion-icon {
+            width: 20px;
+            height: 20px;
+            background: #00bceb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
         }
 
         .chat-container {
@@ -202,6 +276,16 @@
             margin-bottom: 0;
         }
 
+        .assistant-bubble strong {
+            color: #00bceb;
+            font-weight: 600;
+        }
+
+        .assistant-bubble br + strong {
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+
         .typing-indicator {
             display: flex;
             align-items: center;
@@ -223,12 +307,16 @@
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
 
+        .status-container {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
         .powered-by {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            margin-top: 1rem;
             color: #888;
             font-size: 0.8rem;
         }
@@ -246,6 +334,39 @@
             font-size: 0.7rem;
         }
 
+        .connection-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            max-width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .connection-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .connection-status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .connection-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -261,9 +382,27 @@
             0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
             40% { transform: scale(1); opacity: 1; }
         }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .main-container {
+                padding: 2rem 1rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="demo-banner">
+        🚀 Interactive Demo: Cisco AI-Powered Search with Elastic 1Chat Integration
+    </div>
+
     <header class="header">
         <div class="nav-container">
             <a href="#" class="cisco-logo">cisco</a>
@@ -281,17 +420,30 @@
         <section class="hero-section">
             <h1 class="hero-title">Intelligent Search</h1>
             <p class="hero-subtitle">Powered by advanced AI to find exactly what you need</p>
+            <p class="demo-description">
+                This demo showcases a next-generation search experience powered by Elastic's 1Chat AI assistant, 
+                integrated with real Cisco documentation and knowledge base through custom ESQL tools.
+            </p>
         </section>
 
         <div class="search-container">
             <input type="text" id="searchBox" class="search-box" placeholder="Ask me anything about Cisco products, solutions, or support...">
             <button class="search-btn" onclick="handleSearch()">Search</button>
+            
+            <div id="suggestionsContainer" class="suggestions-container">
+                <!-- Dynamic suggestions will be inserted here -->
+            </div>
         </div>
 
-        <div class="powered-by">
-            <span>Powered by</span>
-            <div class="elastic-logo">E</div>
-            <span>Elastic AI</span>
+        <div class="status-container">
+            <div class="powered-by">
+                <span>Powered by</span>
+                <div class="elastic-logo">E</div>
+                <span>Elastic AI</span>
+            </div>
+            <div id="connectionStatus" class="connection-status">
+                <span>Connecting...</span>
+            </div>
         </div>
 
         <div id="chatContainer" class="chat-container">
@@ -305,10 +457,10 @@
     </main>
 
     <script>
-        // Real Elastic API integration via proxy
+        // Real Elastic API integration via Heroku backend
         class ElasticChatAPI {
             constructor() {
-                this.proxyURL = 'http://localhost:3001/api/elastic';
+                this.proxyURL = 'https://cisco-elastic-demo-665e8d549a15.herokuapp.com/api/elastic';
                 this.agentId = 'cisco-nextgen';
             }
 
@@ -351,8 +503,22 @@
                         responseText = JSON.stringify(chatResult);
                     }
                     
-                    // Clean up markdown formatting
-                    responseText = responseText.replace(/^#\s+/gm, '').replace(/\*\*/g, '');
+                    // Clean up and format the response
+                    responseText = responseText
+                        .replace(/^#\s+/gm, '') // Remove markdown headers
+                        .replace(/\*\*/g, '') // Remove bold markdown
+                        .replace(/#{2,}/g, '') // Remove multiple # symbols
+                        .replace(/\s*-\s*/g, '\n• ') // Convert dashes to bullet points
+                        .replace(/(\d+)\.\s+/g, '\n$1. ') // Add line breaks before numbered items
+                        .replace(/\n{3,}/g, '\n\n') // Limit multiple line breaks
+                        .trim();
+                    
+                    // Split into paragraphs for better readability
+                    const paragraphs = responseText.split(/\n\s*\n/);
+                    responseText = paragraphs
+                        .map(p => p.trim())
+                        .filter(p => p.length > 0)
+                        .join('\n\n');
                     
                     return {
                         response: responseText,
@@ -363,11 +529,20 @@
                 } catch (error) {
                     console.error('Chat error:', error);
                     return {
-                        response: `Sorry, I encountered an error connecting to the Cisco AI assistant: ${error.message}`,
+                        response: `Sorry, I encountered an error connecting to the Cisco AI assistant: ${error.message}. This might be due to the backend starting up - please try again in a moment.`,
                         conversation_id: conversationId || this.generateConversationId(),
                         source: 'error',
                         confidence: 0.1
                     };
+                }
+            }
+
+            async testConnection() {
+                try {
+                    const response = await fetch(`${this.proxyURL}/health`);
+                    return response.ok;
+                } catch (error) {
+                    return false;
                 }
             }
 
@@ -380,166 +555,208 @@
         const elasticAPI = new ElasticChatAPI();
         let currentConversationId = null;
 
-        // DOM elements
-        const searchBox = document.getElementById('searchBox');
-        const suggestionsContainer = document.getElementById('suggestionsContainer');
-        const chatContainer = document.getElementById('chatContainer');
-        const chatMessages = document.getElementById('chatMessages');
-
-        // Search suggestions based on common Cisco topics
-        const searchSuggestions = [
-            'How do I install Webex on my Mac?',
-            'Cisco Catalyst switch configuration',
-            'Network troubleshooting best practices',
-            'SD-WAN deployment guide',
-            'ASA firewall setup instructions',
-            'Meraki access point installation',
-            'DNA Center overview and features',
-            'ISE policy configuration',
-            'Umbrella DNS security setup',
-            'Contact center solution options',
-            'WiFi 6 access points comparison',
-            'VPN client troubleshooting',
-            'Network security recommendations',
-            'Cloud infrastructure migration',
-            'Collaboration platform features'
-        ];
-
-        // Event listeners
-        searchBox.addEventListener('input', handleInput);
-        searchBox.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                handleSearch();
-            }
-        });
-
-        searchBox.addEventListener('focus', showSuggestions);
-        document.addEventListener('click', function(e) {
-            if (!searchBox.contains(e.target) && !suggestionsContainer.contains(e.target)) {
-                hideSuggestions();
-            }
-        });
-
-        function handleInput() {
-            const query = searchBox.value.toLowerCase();
-            if (query.length > 0) {
-                // Filter suggestions based on user input
-                const filtered = searchSuggestions.filter(suggestion => 
-                    suggestion.toLowerCase().includes(query)
-                );
-                displaySuggestions(filtered.slice(0, 5));
-            } else {
-                // Show popular suggestions when empty
-                displaySuggestions(searchSuggestions.slice(0, 5));
-            }
-        }
-
-        function displaySuggestions(suggestions) {
-            if (suggestions.length === 0) {
-                hideSuggestions();
-                return;
-            }
-
-            suggestionsContainer.innerHTML = suggestions.map(suggestion => `
-                <div class="suggestion-item" onclick="selectSuggestion('${suggestion.replace(/'/g, "\\'")}')">
-                    <div class="suggestion-icon">🔍</div>
-                    <span>${suggestion}</span>
-                </div>
-            `).join('');
-
-            showSuggestions();
-        }
-
-        function showSuggestions() {
-            suggestionsContainer.classList.add('show');
-        }
-
-        function hideSuggestions() {
-            suggestionsContainer.classList.remove('show');
-        }
-
-        function selectSuggestion(suggestion) {
-            searchBox.value = suggestion;
-            hideSuggestions();
-            handleSearch();
-        }
-
-        // Initialize with default suggestions
+        // Initialize everything when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
+            // Test connection and show status
+            testConnection();
+            
+            // DOM elements
+            const searchBox = document.getElementById('searchBox');
+            const suggestionsContainer = document.getElementById('suggestionsContainer');
+            const chatContainer = document.getElementById('chatContainer');
+            const chatMessages = document.getElementById('chatMessages');
+
+            // Search suggestions
+            const searchSuggestions = [
+                'How do I install Webex on my Mac?',
+                'Cisco Catalyst switch configuration',
+                'Network troubleshooting best practices',
+                'SD-WAN deployment guide',
+                'ASA firewall setup instructions',
+                'Meraki access point installation',
+                'DNA Center overview and features',
+                'ISE policy configuration',
+                'Umbrella DNS security setup',
+                'Contact center solution options',
+                'WiFi 6 access points comparison',
+                'VPN client troubleshooting',
+                'Network security recommendations',
+                'Cloud infrastructure migration',
+                'Collaboration platform features'
+            ];
+
+            // Event listeners
+            searchBox.addEventListener('input', handleInput);
+            searchBox.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleSearch();
+                }
+            });
+
+            searchBox.addEventListener('focus', showSuggestions);
+            document.addEventListener('click', function(e) {
+                if (!searchBox.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+
+            function handleInput() {
+                const query = searchBox.value.toLowerCase();
+                if (query.length > 0) {
+                    const filtered = searchSuggestions.filter(suggestion => 
+                        suggestion.toLowerCase().includes(query)
+                    );
+                    displaySuggestions(filtered.slice(0, 5));
+                } else {
+                    displaySuggestions(searchSuggestions.slice(0, 5));
+                }
+            }
+
+            function displaySuggestions(suggestions) {
+                if (suggestions.length === 0 || !suggestionsContainer) {
+                    hideSuggestions();
+                    return;
+                }
+
+                suggestionsContainer.innerHTML = suggestions.map(suggestion => `
+                    <div class="suggestion-item" onclick="selectSuggestion('${suggestion.replace(/'/g, "\\'")}')">
+                        <div class="suggestion-icon">🔍</div>
+                        <span>${suggestion}</span>
+                    </div>
+                `).join('');
+
+                showSuggestions();
+            }
+
+            function showSuggestions() {
+                if (suggestionsContainer) {
+                    suggestionsContainer.classList.add('show');
+                }
+            }
+
+            function hideSuggestions() {
+                if (suggestionsContainer) {
+                    suggestionsContainer.classList.remove('show');
+                }
+            }
+
+            window.selectSuggestion = function(suggestion) {
+                searchBox.value = suggestion;
+                hideSuggestions();
+                handleSearch();
+            };
+
+            window.handleSearch = async function() {
+                const query = searchBox.value.trim();
+                if (!query) return;
+
+                console.log('🔍 Starting search for:', query);
+
+                if (chatContainer) {
+                    chatContainer.classList.add('show');
+                }
+
+                addMessage(query, 'user');
+                showTypingIndicator();
+
+                try {
+                    const result = await elasticAPI.converse(query, currentConversationId);
+                    currentConversationId = result.conversation_id;
+
+                    removeTypingIndicator();
+                    addMessage(result.response, 'assistant');
+
+                    searchBox.value = '';
+                    hideSuggestions();
+
+                } catch (error) {
+                    removeTypingIndicator();
+                    addMessage('Sorry, I encountered an error while processing your request. The backend might be starting up - please try again in a moment.', 'assistant');
+                    console.error('Search error:', error);
+                }
+            };
+
+            function addMessage(content, type) {
+                if (!chatMessages) return;
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}-message`;
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = `${type}-bubble`;
+                
+                if (type === 'assistant') {
+                    const formattedContent = content
+                        .replace(/\n\n/g, '</p><p>')
+                        .replace(/\n/g, '<br>')
+                        .replace(/^(.+)$/, '<p>$1</p>')
+                        .replace(/<p><\/p>/g, '')
+                        .replace(/•\s*/g, '• ');
+                    
+                    bubbleDiv.innerHTML = formattedContent;
+                } else {
+                    bubbleDiv.textContent = content;
+                }
+                
+                messageDiv.appendChild(bubbleDiv);
+                chatMessages.appendChild(messageDiv);
+                
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function showTypingIndicator() {
+                if (!chatMessages) return;
+
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message assistant-message';
+                typingDiv.id = 'typingIndicator';
+                
+                const indicator = document.createElement('div');
+                indicator.className = 'typing-indicator';
+                indicator.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                `;
+                
+                typingDiv.appendChild(indicator);
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function removeTypingIndicator() {
+                const indicator = document.getElementById('typingIndicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+
+            // Initialize with default suggestions
             displaySuggestions(searchSuggestions.slice(0, 5));
         });
 
-        async function handleSearch() {
-            const query = searchBox.value.trim();
-            if (!query) return;
-
-            console.log('🔍 Starting search for:', query);
-
-            // Show chat container
-            chatContainer.classList.add('show');
-
-            // Add user message
-            addMessage(query, 'user');
-
-            // Show typing indicator
-            showTypingIndicator();
-
+        async function testConnection() {
+            const statusElement = document.getElementById('connectionStatus');
+            
             try {
-                // Call Elastic API through proxy
-                const result = await elasticAPI.converse(query, currentConversationId);
-                currentConversationId = result.conversation_id;
-
-                // Remove typing indicator and add response
-                removeTypingIndicator();
-                addMessage(result.response, 'assistant');
-
-                // Clear search box
-                searchBox.value = '';
-
+                const isConnected = await elasticAPI.testConnection();
+                
+                if (isConnected) {
+                    statusElement.innerHTML = '<span>✅ Connected to Cisco AI Assistant</span>';
+                    statusElement.className = 'connection-status success';
+                } else {
+                    statusElement.innerHTML = '<span>⚡ Backend starting up...</span>';
+                    statusElement.className = 'connection-status warning';
+                    
+                    // Retry connection after a delay
+                    setTimeout(testConnection, 5000);
+                }
             } catch (error) {
-                removeTypingIndicator();
-                addMessage('Sorry, I encountered an error while processing your request. Please try again.', 'assistant');
-                console.error('Search error:', error);
-            }
-        }
-
-        function addMessage(content, type) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}-message`;
-            
-            const bubbleDiv = document.createElement('div');
-            bubbleDiv.className = `${type}-bubble`;
-            bubbleDiv.textContent = content;
-            
-            messageDiv.appendChild(bubbleDiv);
-            chatMessages.appendChild(messageDiv);
-            
-            // Scroll to bottom
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message assistant-message';
-            typingDiv.id = 'typingIndicator';
-            
-            const indicator = document.createElement('div');
-            indicator.className = 'typing-indicator';
-            indicator.innerHTML = `
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-            `;
-            
-            typingDiv.appendChild(indicator);
-            chatMessages.appendChild(typingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function removeTypingIndicator() {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) {
-                indicator.remove();
+                statusElement.innerHTML = '<span>⚠️ Connection issue - please try again</span>';
+                statusElement.className = 'connection-status error';
+                
+                // Retry connection after a delay
+                setTimeout(testConnection, 10000);
             }
         }
     </script>
