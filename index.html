@@ -460,7 +460,9 @@
         // Real Elastic API integration via Heroku backend
         class ElasticChatAPI {
             constructor() {
-                this.proxyURL = 'https://zkvm2uahod.execute-api.us-east-1.amazonaws.com/prod';
+                this.elasticHost = 'https://ai-assistants-ffcafb.kb.us-east-1.aws.elastic.cloud';
+                this.apiKey = 'aGdDR0RKa0JETUNGNlpRbkRHVDY6T0VyTFcyUVN4VWxyaEQyZ00yMnk3QQ==';
+                this.apiKey = 'aGdDR0RKa0JETUNGNlpRbkRHVDY6T0VyTFcyUVN4VWxyaEQyZ00yMnk3QQ==';
                 this.agentId = 'cisco-nextgen';
             }
 
@@ -471,7 +473,7 @@
                     ...(conversationId && { conversation_id: conversationId })
                 };
 
-                const response = await fetch(`${this.proxyURL}/chat/converse`, {
+                const response = await fetch(`${this.elasticHost}/api/chat/converse`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -539,7 +541,7 @@
 
             async testConnection() {
                 try {
-                    const response = await fetch(`${this.proxyURL}/health`);
+                    const response = await fetch(`${this.elasticHost}/api/status`);
                     return response.ok;
                 } catch (error) {
                     return false;
